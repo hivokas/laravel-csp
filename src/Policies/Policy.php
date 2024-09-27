@@ -21,7 +21,7 @@ abstract class Policy
 
     abstract public function configure();
 
-    public function addDirective(string $directive, string|array|bool $values): self
+    public function addDirective(string $directive, string|array|bool $values): static
     {
         $this->guardAgainstInvalidDirectives($directive);
         $this->guardAgainstInvalidValues(Arr::wrap($values));
@@ -59,21 +59,21 @@ abstract class Policy
         return $this;
     }
 
-    public function reportOnly(): self
+    public function reportOnly(): static
     {
         $this->reportOnly = true;
 
         return $this;
     }
 
-    public function enforce(): self
+    public function enforce(): static
     {
         $this->reportOnly = false;
 
         return $this;
     }
 
-    public function reportTo(string $uri): self
+    public function reportTo(string $uri): static
     {
         $this->directives['report-uri'] = [$uri];
 
@@ -85,7 +85,7 @@ abstract class Policy
         return config('csp.enabled');
     }
 
-    public function addNonceForDirective(string $directive): self
+    public function addNonceForDirective(string $directive): static
     {
         return $this->addDirective($directive, "'nonce-".app('csp-nonce')."'");
     }
